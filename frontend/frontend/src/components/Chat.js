@@ -17,9 +17,12 @@ const Chat = () => {
         console.error("No access token found in localStorage");
         return false;
       }
-      const response = await userApi.post("/users/verify/", {
-        token: token,
+      const response = await userApi.get("/users/verify/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
+      console.log("RESPONSE IS: ", response);
       console.log("Token Verified:", response.data);
       return true;
     } catch (err) {
@@ -28,10 +31,14 @@ const Chat = () => {
     }
   };
 
-  // Function to load chat history
   const loadChatHistory = async () => {
     try {
-      const response = await chatApi.get("/chat/history/");
+      const token = localStorage.getItem("access_token");
+      const response = await chatApi.get("/chat/history/", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setMessages(response.data);
     } catch (error) {
       console.error("Failed to load messages:", error);

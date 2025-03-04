@@ -22,13 +22,10 @@ def chat_history(request):
 
             # Call the verify endpoint on User Service (running on 8000)
             verify_url = f"{settings.USER_SERVICE_URL}verify/"
-            payload = {
-                'token': token
-            }
             headers = {
-                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {token}'
             }
-            response = requests.post(verify_url, json=payload, headers=headers)
+            response = requests.get(verify_url, headers=headers)
 
             # If token is valid, proceed with fetching chat history
             if response.status_code == 200:
